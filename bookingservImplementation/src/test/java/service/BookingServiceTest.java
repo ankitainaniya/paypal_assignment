@@ -1,0 +1,125 @@
+package service;
+
+import com.paypal.bfs.test.bookingserv.api.model.Address;
+import com.paypal.bfs.test.bookingserv.api.model.Booking;
+import com.paypal.bfs.test.bookingserv.dao.BookingEntity;
+import com.paypal.bfs.test.bookingserv.exception.BookingException;
+import com.paypal.bfs.test.bookingserv.repo.BookingRepository;
+import com.paypal.bfs.test.bookingserv.service.BookingService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
+public class BookingServiceTest {
+
+    @InjectMocks
+            @Spy
+    BookingService bookingService;
+
+    @Mock
+    BookingRepository bookingRepository;
+
+    @Test
+    public void validateCreateBookingReqTest()
+    {
+        assertTrue(bookingService.validateCreateBookingReq(getBooking()));
+    }
+
+    @Test
+    public void validateCreateBookingReqTest1()
+    {
+        Booking booking=getBooking();
+        booking.setAddress(null);
+        assertFalse(bookingService.validateCreateBookingReq(booking));
+    }
+
+    @Test
+    public void createBookingTest()
+    {
+        Integer hash=getBookingEntity(getBooking()).getHash();
+        Mockito.when(bookingRepository.save(Mockito.any())).thenReturn(getBookingEntity(getBooking()));
+        assertNotNull( bookingService.createBooking(getBooking()));
+   }
+
+    @Test
+    public void createBookingTest1()
+    {
+        Integer hash=123;
+        Mockito.when(bookingRepository.getByHashId(Mockito.anyInt())).thenReturn(hash);
+        Mockito.when(bookingRepository.save(Mockito.any())).thenReturn(getBookingEntity(getBooking()));
+        assertNotNull(bookingService.createBooking(getBooking()));
+    }
+
+    @Test
+    public void getAllBookingsTest()
+    {
+        ArrayList<BookingEntity>list=new ArrayList<>();
+        list.add(getBookingEntity(getBooking()));
+        Mockito.when(bookingRepository.findAll()).thenReturn(list);
+        assertNotNull(bookingService.getAllBookings());
+    }
+
+    @Test
+    public void getAllBookingsTest1()
+    {
+        ArrayList<BookingEntity>list=new ArrayList<>();
+        Mockito.when(bookingRepository.findAll()).thenReturn(list);
+        BookingException exception = assertThrows(
+                BookingException.class,
+                () ->bookingService.getAllBookings());
+    }
+
+    public Booking getBooking()
+    {
+        Booking booking=new Booking();
+        booking.setId(1);
+        booking.setFirstName("Ankita");
+        booking.setLastName("Inaniya");
+        booking.setDob(new Date());
+        booking.setCheckinDatetime(new Date());
+        booking.setCheckoutDatetime(new Date());
+        Address address=new Address();
+        address.setLine1("hno. 170");
+        address.setLine2("annapura");
+        address.setCity("Harda");
+        address.setState("mp");
+        address.setZip("461331");
+        booking.setAddress(address);
+        booking.setDeposit(100.0);
+        booking.setTotalprice(1000.00);
+
+        return booking;
+    }
+
+    public BookingEntity getBookingEntity(Booking booking)
+    {
+        BookingEntity bookingEntity=new BookingEntity();
+        bookingEntity.setId(booking.getId());
+        bookingEntity.setFirst_name(booking.getFirstName());
+        bookingEntity.setLast_name(booking.getLastName());
+        bookingEntity.setDob(booking.getDob());
+        bookingEntity.setCheckinDatetime(booking.getCheckinDatetime());
+        bookingEntity.setCheckoutDatetime(booking.getCheckoutDatetime());
+        bookingEntity.setTotalprice(booking.getTotalprice());
+        bookingEntity.setDeposit(booking.getDeposit());
+        bookingEntity.setAddrLine1(booking.getAddress().getLine1());
+        bookingEntity.setAddrLine2(booking.getAddress().getLine2());
+        bookingEntity.setState(booking.getAddress().getState());
+        bookingEntity.setCity(booking.getAddress().getCity());
+        bookingEntity.setZip(booking.getAddress().getZip());
+        bookingEntity.setHash(Objects.hash(booking.getId(),booking.getFirstName(),booking.getLastName(),
+                booking.getDob(),booking.getCheckinDatetime(),booking.getCheckoutDatetime(),booking.getTotalprice(),booking.getDeposit(),booking.getAddress().getLine1(),
+                booking.getAddress().getLine2(),booking.getAddress().getCity(),booking.getAddress().getState(),booking.getAddress().getZip()));
+        return bookingEntity;
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Booking resource",
+  "description": "Booking resource object",
+  "type": "object",
+  "properties": {
+    "bookingList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "booking.json"
+      }
+    }
+  }
+}

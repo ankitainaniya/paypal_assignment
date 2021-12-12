@@ -1,0 +1,19 @@
+{
+  "title": "Booking response",
+  "description": "Booking resource object",
+  "type": "object",
+  "properties": {
+    "responseMessage": {
+      "description": "responseMessage",
+      "type": "string"
+    },
+    "status": {
+      "description": "status",
+      "type": "string"
+    },
+    "bookingId": {
+      "description": "bookingId",
+      "type": "integer"
+    }
+  }
+}

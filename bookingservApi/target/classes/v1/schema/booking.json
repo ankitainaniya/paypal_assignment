@@ -1,0 +1,92 @@
+{
+  "title": "Booking resource",
+  "description": "Booking resource object",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Booking id",
+      "type": "integer"
+    },
+    "first_name": {
+      "description": "First name",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "last_name": {
+      "description": "Last name",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "dob": {
+      "description": "dob",
+      "type": "string",
+      "format":"date-time"
+    },
+    "checkin_datetime": {
+      "description": "checkin_datetime",
+      "type": "string",
+      "format":"date-time"
+    },
+    "checkout_datetime": {
+      "description": "checkout_datetime",
+      "type": "string",
+      "format":"date-time"
+    },
+    "totalprice": {
+      "description": "totalprice",
+      "type": "number"
+    },
+    "deposit": {
+      "description": "deposit",
+      "type": "number"
+    },
+    "address": {
+      "type" : "object",
+      "properties": {
+
+        "line1": {
+          "description": "line1",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "line2": {
+          "description": "line2",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "city": {
+          "description": "city",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "state": {
+          "description": "state",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "zip": {
+          "description": "zip",
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 6
+        },
+        "required": [
+          "line1",
+          "city",
+          "state",
+          "zip"
+        ]
+      }
+    }
+  },
+  "required": [
+    "first_name",
+    "last_name"
+  ]
+}
